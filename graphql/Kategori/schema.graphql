@@ -1,0 +1,47 @@
+type Kategori {
+    id: ID!
+    nama_kategori: String!
+    created_at: DateTime
+    updated_at: DateTime
+    deleted_at: DateTime
+}
+
+input CreateKategoriInput {
+    nama_kategori: String!
+}
+
+input UpdateKategoriInput {
+    id: ID!
+    nama_kategori: String
+}
+
+extend type Query {
+    allKategori: [Kategori!]!
+    @all(model: "App\\Models\\Kategori\\Kategoris")
+
+    kategori(id: ID! @eq(key: "id")): Kategori
+    @find(model: "App\\Models\\Kategori\\Kategoris")
+
+    kategoriByNama(nama_kategori: String! @where(operator: "like", key: "nama_kategori")): [Kategori!]!
+    @all(model: "App\\Models\\Kategori\\Kategoris")
+}
+
+extend type Mutation {
+    createKategori(input: CreateKategoriInput! @spread): Kategori
+    @create(model: "App\\Models\\Kategori\\Kategoris")
+
+    updateKategori(
+        id: ID! @eq(key: "id"),
+        input: UpdateKategoriInput! @spread
+    ): Kategori
+    @update(model: "App\\Models\\Kategori\\Kategoris")
+
+    deleteKategori(id: ID! @eq(key: "id")): Kategori
+    @delete(model: "App\\Models\\Kategori\\Kategoris")
+
+    restoreKategori(id: ID!): Kategori
+    @field(resolver: "App\\GraphQL\\Kategori\\Mutations\\KategoriMutation@restore")
+
+    forceDeleteKategori(id: ID!): Kategori
+    @field(resolver: "App\\GraphQL\\Kategori\\Mutations\\KategoriMutation@forceDelete")
+}

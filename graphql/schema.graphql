@@ -1,0 +1,8 @@
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
+#import Kategori/schema.graphql
+#import Supplier/schema.graphql
+#import Barang/schema.graphql
+#import BarangMasuk/schema.graphql
+#import BarangKeluar/schema.graphql
+#import User/schema.graphql

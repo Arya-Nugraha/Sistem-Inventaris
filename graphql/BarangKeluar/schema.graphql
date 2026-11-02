@@ -1,0 +1,62 @@
+type BarangKeluar {
+    id: ID!
+    id_barang: Int!
+    jumlah: Int!
+    tanggal_keluar: Date!
+    penerima: String
+    keterangan: String
+    created_at: DateTime
+    updated_at: DateTime
+
+    barang: Barang @belongsTo(relation: "barang")
+}
+
+input createBarangKeluarInput {
+    id_barang: Int!
+    jumlah: Int!
+    tanggal_keluar: Date!
+    penerima: String
+    keterangan: String
+}
+
+input UpdateBarangKeluarInput {
+    id_barang: Int!
+    jumlah: Int!
+    tanggal_keluar: Date!
+    penerima: String
+    keterangan: String
+}
+
+extend type Query {
+    allBarangKeluar: [BarangKeluar!]!
+    @all(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    barangKeluar(id: ID! @eq(key: "id")): BarangKeluar
+    @find(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    barangKeluarByBarang(id_barang: Int! @eq(key: "id_barang")): [BarangKeluar!]!
+    @all(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    barangKeluarByPenerima(penerima: String! @where(operator: "like", key: "penerima")): [BarangKeluar!]!
+    @all(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    barangKeluarByTanggal(
+        from: Date! @where(key: "tanggal_keluar", operator: ">=")
+        to: Date! @where(key: "tanggal_keluar", operator: "<=")
+    ): [BarangKeluar!]!
+    @all(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+}
+
+extend type Mutation {
+    createBarangKeluar(input: createBarangKeluarInput! @spread): BarangKeluar
+    @create(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    updateBarangKeluar(
+        id: ID! @eq(key: "id"),
+        input: UpdateBarangKeluarInput! @spread
+    ): BarangKeluar
+    @update(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+
+    deleteBarangKeluar(id: ID! @eq(key: "id")): BarangKeluar
+    @delete(model: "App\\Models\\BarangKeluar\\BarangKeluars")
+}

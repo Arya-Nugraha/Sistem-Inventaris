@@ -1,0 +1,46 @@
+type BarangMasuk {
+    id: ID!
+    id_barang: Int!
+    id_supplier: Int!
+    jumlah: Int!
+    tanggal_masuk: Date!
+    keterangan: String
+    created_at: DateTime
+    updated_at: DateTime
+
+    barang: Barang @belongsTo(relation: "barang")
+    supplier: Supplier @belongsTo(relation: "supplier")
+}
+
+input CreateBarangMasukInput {
+    id_barang: Int!
+    id_supplier: Int!
+    jumlah: Int!
+    tanggal_masuk: Date!
+    keterangan: String
+}
+
+input UpdateBarangMasukInput {
+    id_barang: Int
+    id_supplier: Int
+    jumlah: Int
+    tanggal_masuk: Date
+    keterangan: String
+}
+
+extend type Query {
+    allBarangMasuk: [BarangMasuk!]!
+    @all(model: "App\\Models\\BarangMasuk\\BarangMasuks")
+
+    barangMasuk(id: ID! @eq(key: "id")): BarangMasuk
+    @find(model: "App\\Models\\BarangMasuk\\BarangMasuks")
+
+    barangMasukByBarang(id_barang: Int! @eq(key: "id_barang")): [BarangMasuk!]!
+    @all(model: "App\\Models\\BarangMasuk\\BarangMasuks")
+
+    barangMasukByTanggal(
+        from: Date! @where(key: "tanggal_masuk", operator: ">=")
+        to: Date! @where(key: "tanggal_masuk", operator: "<=")
+    ): [BarangMasuk!]!
+    @all(model: "App\\Models\\BarangMasuk\\BarangMasuks")
+}

@@ -1,0 +1,56 @@
+type Barang {
+    id: ID!
+    id_kategori: Int!
+    kode_barang: String!
+    nama_barang: String!
+    satuan: String!
+    stok: Int!
+    harga: Int!
+    created_at: DateTime
+    updated_at: DateTime
+
+    kategori: Kategori @belongsTo(relation: "kategori")
+}
+
+input CreateBarangInput {
+    id_kategori: Int!
+    kode_barang: String!
+    nama_barang: String!
+    satuan: String!
+    stok: Int!
+    harga: Int!
+}
+
+input UpdateBarangInput {
+    id_kategori: Int
+    kode_barang: String
+    nama_barang: String
+    satuan: String
+    stok: Int
+    harga: Int
+}
+
+extend type Query {
+    allBarang: [Barang!]!
+    @all(model: "App\\Models\\Barang\\Barangs")
+
+    barang(id: ID! @eq(key: "id")): Barang
+    @find(model: "App\\Models\\Barang\\Barangs")
+
+    barangByNama(nama_barang: String! @where(operator: "like", key: "nama_barang")): [Barang!]!
+    @all(model: "App\\Models\\Barang\\Barangs")
+}
+
+extend type Mutation {
+    createBarang(input: CreateBarangInput! @spread): Barang
+    @create(model: "App\\Models\\Barang\\Barangs")
+
+    updateBarang(
+        id: ID! @eq(key: "id"),
+        input: UpdateBarangInput! @spread
+    ): Barang
+    @update(model: "App\\Models\\Barang\\Barangs")
+
+    deleteBarang(id: ID! @eq(key: "id")): Barang
+    @delete(model: "App\\Models\\Barang\\Barangs")
+}

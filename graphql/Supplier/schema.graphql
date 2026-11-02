@@ -1,0 +1,45 @@
+type Supplier {
+    id: ID!
+    nama_supplier: String!
+    alamat: String
+    telepon: String
+    created_at: DateTime
+    updated_at: DateTime
+}
+
+input CreateSupplierInput {
+    nama_supplier: String!
+    alamat: String!
+    telepon: String!
+}
+
+input UpdateSupplierInput {
+    nama_supplier: String
+    alamat: String
+    telepon: String
+}
+
+extend type Query {
+    allSupplier: [Supplier!]!
+    @all(model: "App\\Models\\Supplier\\Suppliers")
+
+    supplier(id: ID! @eq(key: "id")): Supplier
+    @find(model: "App\\Models\\Supplier\\Suppliers")
+
+    supplierByNama(nama_supplier: String! @where(operator: "like", key: "nama_supplier")): [Supplier!]!
+    @all(model: "App\\Models\\Supplier\\Suppliers")
+}
+
+extend type Mutation {
+    createSupplier(input: CreateSupplierInput! @spread): Supplier
+    @create(model: "App\\Models\\Supplier\\Suppliers")
+
+    updateSupplier(
+        id: ID! @eq(key: "id"),
+        input: UpdateSupplierInput! @spread
+    ): Supplier
+    @update(model: "App\\Models\\Supplier\\Suppliers")
+
+    deleteSupplier(id: ID! @eq(key: "id")): Supplier
+    @delete(model: "App\\Models\\Supplier\\Suppliers")
+}
